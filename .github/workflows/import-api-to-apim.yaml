@@ -10,12 +10,6 @@ on:
       AZURE_SUBSCRIPTION_ID:
         required: true
         description: 'Azure Subscription ID'
-      ACTIONS_AUTH_APP_ID:
-        required: true
-        description: 'GitHub App ID'
-      ACTIONS_AUTH_APP_PRIVATE_KEY:
-        required: true
-        description: 'GitHub App Private Key'
 
     inputs:
       environment:
