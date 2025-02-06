@@ -1,0 +1,71 @@
+on:
+  workflow_call:
+    secrets:
+      AZURE_TENANT_ID:
+        required: true
+        description: 'Azure Tenant ID'
+      AZURE_CLIENT_ID:
+        required: true
+        description: 'Azure Client ID'
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+        description: 'Azure Subscription ID'
+      ACTIONS_AUTH_APP_ID:
+        required: true
+        description: 'GitHub App ID'
+      ACTIONS_AUTH_APP_PRIVATE_KEY:
+        required: true
+        description: 'GitHub App Private Key'
+
+    inputs:
+      environment:
+        type: string
+        required: true
+        description: 'environment to deploy to'
+      apiName:
+        type: string
+        required: true
+        description: 'API name to import'
+      apiPath:
+        type: string
+        required: true
+        description: 'API path to import, without the leading /'
+      specificationPath:
+        type: string
+        required: true
+        description: 'Specification path to import, without the leading /'
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: read
+
+jobs:
+  import_api_CD:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+        with:
+          repository: Uniphar/shared-workflows
+          path: shared-workflows
+          ref: feature/apim-import
+
+      - name: azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - name: Import API into APIM
+        uses: azure/powershell@v2
+        with: 
+          inlineScript: |
+            . ./shared-workflows/utilities/Import-UniApimApi.ps1
+
+            Import-UniApimApi ${{ inputs.environment }} ${{ inputs.environment }} ${{ inputs.apiName }} ${{ inputs.apiPath }} ${{ inputs.specificationPath }} -Verbose -ErrorAction Stop
+          azPSVersion: "latest"
+          errorActionPreference: 'stop'
+          failOnStandardError: true
