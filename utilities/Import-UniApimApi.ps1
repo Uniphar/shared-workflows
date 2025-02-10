@@ -19,12 +19,6 @@ The path of the API. Without the leading slash.
 .PARAMETER SpecificationPath
 The path to the API specification. Without the leading slash.
 
-.PARAMETER ResourceGroupName
-The name of the APIM resource group.
-
-.PARAMETER ApiManagementName
-The name of the APIM instance.
-
 .EXAMPLE
 Import-UniApimApi -Environment "dev" -ApiName "my-api" -ApiPath "my-api" -SpecificationPath "my-api/swagger.json" -ResourceGroupName "my-rg" -ApiManagementName "my-apim"
 
