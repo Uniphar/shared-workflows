@@ -20,7 +20,7 @@ The path of the API. Without the leading slash.
 The path to the API specification. Without the leading slash.
 
 .EXAMPLE
-Import-UniApimApi -Environment "dev" -ApiName "my-api" -ApiPath "my-api" -SpecificationPath "my-api/swagger.json" -ResourceGroupName "my-rg" -ApiManagementName "my-apim"
+Import-UniApimApi -Environment "dev" -ApiName "my-api" -ApiPath "my-api" -SpecificationPath "my-api/swagger.json"
 
 .NOTES
 At the moment this function only supports scenarios where the following is true:
