@@ -38,9 +38,11 @@ At the moment this function only supports scenarios where the following is true:
         [string]$ApiName,
 
         [parameter(Mandatory = $true, Position = 2)]
+        [ValidatePattern('^[^/]')] # No leading slash
         [string]$ApiPath,
 
         [parameter(Mandatory = $true, Position = 3)]
+        [ValidatePattern('^[^/]')] # No leading slash
         [string]$SpecificationPath
     )
 
