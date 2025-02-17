@@ -16,15 +16,15 @@ The name of the API.
 .PARAMETER ApiPath
 The path of the API. Without the leading slash.
 
-.PARAMETER SpecificationPath
+.PARAMETER OpenApiSpecPath
 The path to the API specification. Without the leading slash.
 
 .EXAMPLE
-Import-UniApimApi -Environment "dev" -ApiName "my-api" -ApiPath "my-api" -SpecificationPath "my-api/swagger.json"
+Import-UniApimApi -Environment "dev" -ApiName "my-api" -ApiPath "my-api" -OpenApiSpecPath "my-api/swagger.json"
 
 .NOTES
 At the moment this function only supports scenarios where the following is true:
-- The api is hosted under the "api" subdomain of one of the uniphar.ie zones.
+- The API is hosted under the "API" subdomain of one of the uniphar.ie zones.
 - The API is imported as an OpenAPI specification.
 - The API is imported to the "Development" product.
 #>
@@ -43,7 +43,7 @@ At the moment this function only supports scenarios where the following is true:
 
         [parameter(Mandatory = $true, Position = 3)]
         [ValidatePattern('^[^/]')] # No leading slash
-        [string]$SpecificationPath
+        [string]$OpenApiSpecPath
     )
 
     $ResourceGroupName = "web-$Environment"
@@ -55,7 +55,7 @@ At the moment this function only supports scenarios where the following is true:
     }
 
     $serviceUrl = "https://$apiHostname"
-    $specificationUrl = "$serviceUrl/$SpecificationPath"
+    $specificationUrl = "$serviceUrl/$OpenApiSpecPath"
     
     $context = New-AzApiManagementContext -ResourceGroupName $ResourceGroupName -ServiceName $ApiManagementName
 
