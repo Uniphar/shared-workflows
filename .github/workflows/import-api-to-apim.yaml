@@ -43,7 +43,7 @@ jobs:
         with:
           repository: Uniphar/shared-workflows
           path: shared-workflows
-          ref: feature/apim-import
+          ref: main
 
       - name: azure login
         uses: azure/login@v2
