@@ -59,13 +59,8 @@ At the moment this function only supports scenarios where the following is true:
     
     $context = New-AzApiManagementContext -ResourceGroupName $ResourceGroupName -ServiceName $ApiManagementName
 
-    $apiId = (Get-AzApiManagementApi -Context $context -Name $ApiName -ErrorAction SilentlyContinue).ApiId
-    if ($null -eq $apiId) {
-        $api = Import-AzApiManagementApi -Context $context -SpecificationFormat OpenApi -SpecificationUrl $specificationUrl -Path $ApiPath -ServiceUrl $serviceUrl
-    }
-    else{
-        $api = Import-AzApiManagementApi -Context $context -ApiId $apiId -SpecificationFormat OpenApi -SpecificationUrl $specificationUrl -Path $ApiPath -ServiceUrl $serviceUrl
-    }
+    $apiId = ($ApiName -replace '[ ._]', '-').ToLower()
+    $api = Import-AzApiManagementApi -Context $context -ApiId $apiId -SpecificationFormat OpenApi -SpecificationUrl $specificationUrl -Path $ApiPath -ServiceUrl $serviceUrl
 
     $product = Get-AzApiManagementProduct -Context $context -Title 'Development'
 
