@@ -43,7 +43,11 @@ At the moment this function only supports scenarios where the following is true:
 
         [parameter(Mandatory = $true, Position = 3)]
         [ValidatePattern('^[^/]')] # No leading slash
-        [string]$OpenApiSpecPath
+        [string]$OpenApiSpecPath,
+
+        [parameter(Mandatory = $false, Position = 4)]
+        [bool]$UsesCiamLogin = $false
+
     )
 
     $ResourceGroupName = "web-$Environment"
@@ -65,4 +69,20 @@ At the moment this function only supports scenarios where the following is true:
     $product = Get-AzApiManagementProduct -Context $context -Title 'Development'
 
     Add-AzApiManagementApiToProduct -Context $context -ProductId $product.ProductId -ApiId $api.ApiId
+
+    $namedValueName = "resource-uri-$($api.ApiId)"
+    $namedValueExists = $null -ne (Get-AzApiManagementNamedValue -Context $context -Name $namedValueName)
+
+    if ($namedValueExists) {
+        # Replace placeholder in policy XML for corresponding named value
+        $policyPath = ".\utilities\apiPolicy.xml"
+        $policyTemplatePath = ".\utilities\apiPolicyTemplate.xml"
+        $policyContent = (Get-Content $policyTemplatePath -Raw) -replace '<<<resourceUriNamedValue>>>', $namedValueName -replace '<<<usesCiamLogin>>>', $UsesCiamLogin
+        $policyContent | Set-Content $policyPath
+
+        Set-AzApiManagementPolicy -Context $context -ApiId $api.ApiId -PolicyFilePath $policyPath
+    }
+    else {
+        Write-Error "Failed to apply policy to API '$($api.ApiId)'. Named value '$namedValue' not found."
+    }
 }
