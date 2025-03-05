@@ -32,6 +32,7 @@ on:
         type: boolean
         required: false
         description: 'Does the API use the CIAM endpoint'
+        default: false
 
 permissions:
   id-token: write
@@ -63,7 +64,7 @@ jobs:
           inlineScript: |
             . ./shared-workflows/utilities/Import-UniApimApi.ps1
 
-            Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} ${{ inputs.usesCiamLogin }} -Verbose -ErrorAction Stop
+            Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} -UsesCiamLogin ${{ inputs.usesCiamLogin }} -Verbose -ErrorAction Stop
           azPSVersion: "latest"
           errorActionPreference: 'stop'
           failOnStandardError: true
