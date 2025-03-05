@@ -63,7 +63,8 @@ jobs:
         with: 
           inlineScript: |
             . ./shared-workflows/utilities/Import-UniApimApi.ps1
-            $usesCiamLogin = ${{ inputs.usesCiamLogin }} ? $true : $false
+            echo "usesCiamLogin: ${{ inputs.usesCiamLogin }}"
+            $usesCiamLogin = ${{ inputs.usesCiamLogin }} -eq 'true' ? $true : $false
 
             Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} $usesCiamLogin -Verbose -ErrorAction Stop
           azPSVersion: "latest"
