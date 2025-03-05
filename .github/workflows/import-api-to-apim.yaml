@@ -48,7 +48,7 @@ jobs:
         with:
           repository: Uniphar/shared-workflows
           path: shared-workflows
-          ref: ${{ github.ref }}
+          ref: ${{ github.ref_name }}
 
       - name: azure login
         uses: azure/login@v2
