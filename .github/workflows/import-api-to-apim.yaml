@@ -68,4 +68,4 @@ jobs:
             echo "bool value: [System.Convert]::ToBoolean("${{ inputs.usesCiamLogin }}")"
             $usesCiamLogin = [System.Convert]::ToBoolean("${{ inputs.usesCiamLogin }}")
 
-            Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} ${{ inputs.usesCiamLogin }} -Verbose -ErrorAction Stop
+            Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} $usesCiamLogin -Verbose -ErrorAction Stop
