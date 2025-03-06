@@ -59,20 +59,16 @@ jobs:
           enable-AzPSSession: true
 
       - name: Import API into APIM
-        uses: azure/powershell@v2
-        with: 
-          inlineScript: |
-            . ./shared-workflows/utilities/Import-UniApimApi.ps1
+        shell: pwsh
+        run: |
+          . ./shared-workflows/utilities/Import-UniApimApi.ps1
 
-            #debug
-            echo "usesCiamLogin: ${{ inputs.usesCiamLogin }}"
+          #debug
+          echo "usesCiamLogin: ${{ inputs.usesCiamLogin }}"
 
-            $usesCiamLogin = (${{ inputs.usesCiamLogin }} -eq 'true') ? $True : $False
+          $usesCiamLogin = (${{ inputs.usesCiamLogin }} -eq 'true') ? $True : $False
 
-            #debug
-            echo "usesCiamLogin: $usesCiamLogin"
+          #debug
+          echo "usesCiamLogin: $usesCiamLogin"
 
-            Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} $usesCiamLogin -Verbose -ErrorAction Stop
-          azPSVersion: "latest"
-          errorActionPreference: 'stop'
-          failOnStandardError: true
+          Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} $usesCiamLogin -Verbose -ErrorAction Stop
