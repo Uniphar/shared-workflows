@@ -59,17 +59,13 @@ jobs:
           enable-AzPSSession: true
 
       - name: Import API into APIM
-        shell: pwsh
-        run: |
-          Import-Module Az.ApiManagement
-          . ./shared-workflows/utilities/Import-UniApimApi.ps1
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: 'latest'
+          inlineScript: |
+            . ./shared-workflows/utilities/Import-UniApimApi.ps1
 
-          #debug
-          echo "usesCiamLogin: ${{ inputs.usesCiamLogin }}"
+            echo "bool value: [System.Convert]::ToBoolean("${{ inputs.usesCiamLogin }}")"
+            $usesCiamLogin = [System.Convert]::ToBoolean("${{ inputs.usesCiamLogin }}")
 
-          $usesCiamLogin = (${{ inputs.usesCiamLogin }} -eq 'true') ? $True : $False
-
-          #debug
-          echo "usesCiamLogin: $usesCiamLogin"
-
-          Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} $usesCiamLogin -Verbose -ErrorAction Stop
+            Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} ${{ inputs.usesCiamLogin }} -Verbose -ErrorAction Stop
