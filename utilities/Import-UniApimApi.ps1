@@ -75,8 +75,8 @@ At the moment this function only supports scenarios where the following is true:
 
     if ($namedValueExists) {
         # Replace placeholder in policy XML for corresponding named value
-        $policyPath = ".\shared-workflows\utilities\apiPolicy.xml"
-        $policyTemplatePath = ".\shared-workflows\utilities\apiPolicyTemplate.xml"
+        $policyPath = "./shared-workflows/utilities/apiPolicy.xml"
+        $policyTemplatePath = "./shared-workflows/utilities/apiPolicyTemplate.xml"
         $policyContent = (Get-Content $policyTemplatePath -Raw) -replace '<<<resourceUriNamedValue>>>', $namedValueName -replace '<<<usesCiamLogin>>>', $UsesCiamLogin
         $policyContent | Set-Content $policyPath
 
