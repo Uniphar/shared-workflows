@@ -63,6 +63,10 @@ jobs:
         with: 
           inlineScript: |
             . ./shared-workflows/utilities/Import-UniApimApi.ps1
+
+            #debug
+            echo "usesCiamLogin: ${{ inputs.usesCiamLogin }}"
+
             $usesCiamLogin = (${{ inputs.usesCiamLogin }} -eq 'true') ? $True : $False
 
             #debug
