@@ -65,6 +65,9 @@ jobs:
             . ./shared-workflows/utilities/Import-UniApimApi.ps1
             $usesCiamLogin = (${{ inputs.usesCiamLogin }} -eq 'true') ? $True : $False
 
+            #debug
+            echo "usesCiamLogin: $usesCiamLogin"
+
             Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} $usesCiamLogin -Verbose -ErrorAction Stop
           azPSVersion: "latest"
           errorActionPreference: 'stop'
