@@ -37,7 +37,6 @@ on:
 permissions:
   id-token: write
   contents: read
-  pull-requests: read
 
 jobs:
   import_api_CD:
