@@ -61,6 +61,7 @@ jobs:
       - name: Import API into APIM
         shell: pwsh
         run: |
+          Import-Module Az.ApiManagement
           . ./shared-workflows/utilities/Import-UniApimApi.ps1
 
           #debug
