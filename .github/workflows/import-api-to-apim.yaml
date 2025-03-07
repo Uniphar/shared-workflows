@@ -28,11 +28,15 @@ on:
         type: string
         required: true
         description: 'Specification path to import, without the leading /'
+      usesCiamLogin:
+        type: boolean
+        required: false
+        description: 'Does the API use the CIAM endpoint'
+        default: false
 
 permissions:
   id-token: write
   contents: read
-  pull-requests: read
 
 jobs:
   import_api_CD:
@@ -55,11 +59,12 @@ jobs:
 
       - name: Import API into APIM
         uses: azure/powershell@v2
-        with: 
+        with:
           inlineScript: |
             . ./shared-workflows/utilities/Import-UniApimApi.ps1
+            $usesCiamLogin = [System.Convert]::ToBoolean("${{ inputs.usesCiamLogin }}")
 
-            Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} -Verbose -ErrorAction Stop
+            Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} $usesCiamLogin -Verbose -ErrorAction Stop
           azPSVersion: "latest"
           errorActionPreference: 'stop'
           failOnStandardError: true
