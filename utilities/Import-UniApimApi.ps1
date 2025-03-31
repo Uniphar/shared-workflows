@@ -51,7 +51,7 @@ At the moment this function only supports scenarios where the following is true:
     )
 
     $ResourceGroupName = "web-$Environment"
-    $ApiManagementName = "$ResourceGroupName-apim"
+    $ApiManagementName = "uni-$ResourceGroupName-apim"
 
     switch ($Environment) {
         'prod' { $apiHostname = "api.uniphar.ie" }
@@ -83,6 +83,6 @@ At the moment this function only supports scenarios where the following is true:
         Set-AzApiManagementPolicy -Context $context -ApiId $api.ApiId -PolicyFilePath $policyPath
     }
     else {
-        Write-Error "Failed to apply policy to API '$($api.ApiId)'. Named value '$namedValue' not found."
+        Write-Warning "Failed to apply policy to API '$($api.ApiId)'. Named value '$namedValueName' not found."
     }
 }
