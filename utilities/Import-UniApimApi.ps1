@@ -83,6 +83,6 @@ At the moment this function only supports scenarios where the following is true:
         Set-AzApiManagementPolicy -Context $context -ApiId $api.ApiId -PolicyFilePath $policyPath
     }
     else {
-        Write-Warning "Failed to apply policy to API '$($api.ApiId)'. Named value '$namedValueName' not found."
+        Write-Error "Failed to apply policy to API '$($api.ApiId)'. Named value '$namedValueName' not found."
     }
 }
