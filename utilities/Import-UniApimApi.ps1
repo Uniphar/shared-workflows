@@ -51,7 +51,7 @@ At the moment this function only supports scenarios where the following is true:
     )
 
     $ResourceGroupName = "web-$Environment"
-    $ApiManagementName = "uni-$ResourceGroupName-apim"
+    $ApiManagementName = "uniphar-$Environment-apim"
 
     switch ($Environment) {
         'prod' { $apiHostname = "api.uniphar.ie" }
