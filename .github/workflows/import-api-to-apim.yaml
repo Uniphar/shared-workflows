@@ -59,12 +59,18 @@ jobs:
 
       - name: Import API into APIM
         uses: azure/powershell@v2
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          API_NAME: ${{ inputs.apiName }}
+          API_PATH: ${{ inputs.apiPath }}
+          OPENAPI_SPEC_PATH: ${{ inputs.openApiSpecPath }}
+          USES_CIAM_LOGIN: ${{ inputs.usesCiamLogin }}
         with:
           inlineScript: |
             . ./shared-workflows/utilities/Import-UniApimApi.ps1
-            $usesCiamLogin = [System.Convert]::ToBoolean("${{ inputs.usesCiamLogin }}")
+            $usesCiamLogin = [System.Convert]::ToBoolean($env:USES_CIAM_LOGIN)
 
-            Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} $usesCiamLogin -Verbose -ErrorAction Stop
+            Import-UniApimApi $env:ENVIRONMENT "$env:API_NAME" $env:API_PATH $env:OPENAPI_SPEC_PATH $usesCiamLogin -Verbose -ErrorAction Stop
           azPSVersion: "latest"
           errorActionPreference: 'stop'
           failOnStandardError: true
