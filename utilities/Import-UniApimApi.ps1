@@ -1,5 +1,3 @@
-$script:ImportUniApimApiUtilitiesRoot = $PSScriptRoot
-
 function Import-UniApimApi 
 {
 <#
