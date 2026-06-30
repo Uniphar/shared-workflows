@@ -1,3 +1,5 @@
+$script:ImportUniApimApiUtilitiesRoot = $PSScriptRoot
+
 function Import-UniApimApi 
 {
 <#
@@ -18,6 +20,12 @@ The path of the API. Without the leading slash.
 
 .PARAMETER OpenApiSpecPath
 The path to the API specification. Without the leading slash.
+
+.PARAMETER UsesCiamLogin
+Whether the API uses the CIAM endpoint.
+
+.PARAMETER EnableOpenApiPrefixInServerUrl
+Whether the OpenAPI server URL already includes the API path prefix.
 
 .EXAMPLE
 Import-UniApimApi -Environment "dev" -ApiName "my-api" -ApiPath "my-api" -OpenApiSpecPath "my-api/swagger.json"
@@ -46,7 +54,10 @@ At the moment this function only supports scenarios where the following is true:
         [string]$OpenApiSpecPath,
 
         [parameter(Mandatory = $false, Position = 4)]
-        [bool]$UsesCiamLogin = $false
+        [bool]$UsesCiamLogin = $false,
+
+        [parameter(Mandatory = $false, Position = 5)]
+        [bool]$EnableOpenApiPrefixInServerUrl = $false
 
     )
 
@@ -58,8 +69,14 @@ At the moment this function only supports scenarios where the following is true:
         default { $apiHostname = "api.$Environment.uniphar.ie" }
     }
 
-    $serviceUrl = "https://$apiHostname"
-    $specificationUrl = "$serviceUrl/$OpenApiSpecPath"
+    $serviceRootUrl = "https://$apiHostname"
+    $serviceUrl = $serviceRootUrl
+
+    if ($EnableOpenApiPrefixInServerUrl) {
+        $serviceUrl = "$serviceRootUrl/$ApiPath"
+    }
+
+    $specificationUrl = "$serviceRootUrl/$OpenApiSpecPath"
     
     $context = New-AzApiManagementContext -ResourceGroupName $ResourceGroupName -ServiceName $ApiManagementName
 
@@ -75,8 +92,8 @@ At the moment this function only supports scenarios where the following is true:
 
     if ($namedValueExists) {
         # Replace placeholder in policy XML for corresponding named value
-        $policyPath = "./shared-workflows/utilities/apiPolicy.xml"
-        $policyTemplatePath = "./shared-workflows/utilities/apiPolicyTemplate.xml"
+        $policyPath = Join-Path $script:ImportUniApimApiUtilitiesRoot "apiPolicy.xml"
+        $policyTemplatePath = Join-Path $script:ImportUniApimApiUtilitiesRoot "apiPolicyTemplate.xml"
         $policyContent = (Get-Content $policyTemplatePath -Raw) -replace '<<<resourceUriNamedValue>>>', $namedValueName -replace '<<<usesCiamLogin>>>', $UsesCiamLogin
         $policyContent | Set-Content $policyPath
 
