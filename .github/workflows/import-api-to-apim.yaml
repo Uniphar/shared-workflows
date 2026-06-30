@@ -66,8 +66,7 @@ jobs:
         uses: azure/powershell@v2
         with:
           inlineScript: |
-            $importScriptPath = Join-Path $env:GITHUB_WORKSPACE "shared-workflows/utilities/Import-UniApimApi.ps1"
-            . $importScriptPath
+            . ./shared-workflows/utilities/Import-UniApimApi.ps1
             $usesCiamLogin = [System.Convert]::ToBoolean("${{ inputs.usesCiamLogin }}")
             $enableOpenApiPrefixInServerUrl = [System.Convert]::ToBoolean("${{ inputs['enable-openapi-prefix-in-server-url'] }}")
 
