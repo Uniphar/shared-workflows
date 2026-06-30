@@ -33,6 +33,11 @@ on:
         required: false
         description: 'Does the API use the CIAM endpoint'
         default: false
+      enable-openapi-prefix-in-server-url:
+        type: boolean
+        required: false
+        description: 'Whether the OpenAPI server URL already includes the API path prefix'
+        default: false
 
 permissions:
   id-token: write
@@ -63,8 +68,9 @@ jobs:
           inlineScript: |
             . ./shared-workflows/utilities/Import-UniApimApi.ps1
             $usesCiamLogin = [System.Convert]::ToBoolean("${{ inputs.usesCiamLogin }}")
+            $enableOpenApiPrefixInServerUrl = [System.Convert]::ToBoolean("${{ inputs['enable-openapi-prefix-in-server-url'] }}")
 
-            Import-UniApimApi ${{ inputs.environment }} "${{ inputs.apiName }}" ${{ inputs.apiPath }} ${{ inputs.openApiSpecPath }} $usesCiamLogin -Verbose -ErrorAction Stop
+            Import-UniApimApi "${{ inputs.environment }}" "${{ inputs.apiName }}" "${{ inputs.apiPath }}" "${{ inputs.openApiSpecPath }}" $usesCiamLogin $enableOpenApiPrefixInServerUrl -Verbose -ErrorAction Stop
           azPSVersion: "latest"
           errorActionPreference: 'stop'
           failOnStandardError: true
