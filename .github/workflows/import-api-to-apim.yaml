@@ -57,8 +57,7 @@ jobs:
         with:
           repository: Uniphar/shared-workflows
           path: shared-workflows
-          #temp 
-          ref: feature/change-resourceurinamevalue
+          ref: main
 
       - name: azure login
         uses: azure/login@v2
