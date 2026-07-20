@@ -55,7 +55,10 @@ At the moment this function only supports scenarios where the following is true:
         [bool]$UsesCiamLogin = $false,
 
         [parameter(Mandatory = $false, Position = 5)]
-        [bool]$EnableOpenApiPrefixInServerUrl = $false
+        [bool]$EnableOpenApiPrefixInServerUrl = $false,
+
+        [parameter(Mandatory = $false, Position = 6)]
+        [string]$ResourceUriNamedValueOverride = ""
 
     )
 
@@ -85,7 +88,7 @@ At the moment this function only supports scenarios where the following is true:
 
     Add-AzApiManagementApiToProduct -Context $context -ProductId $product.ProductId -ApiId $api.ApiId
 
-    $namedValueName = "resource-uri-$($api.ApiId)"
+    $namedValueName = if (-not [string]::IsNullOrWhiteSpace($ResourceUriNamedValueOverride)) { $ResourceUriNamedValueOverride.Trim() } else { "resource-uri-$($api.ApiId)" }
     $namedValueExists = $null -ne (Get-AzApiManagementNamedValue -Context $context -Name $namedValueName)
 
     if ($namedValueExists) {

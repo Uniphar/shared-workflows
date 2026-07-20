@@ -38,6 +38,11 @@ on:
         required: false
         description: 'Whether the OpenAPI server URL already includes the API path prefix'
         default: false
+      resourceUriNamedValue:
+        type: string
+        required: false
+        description: 'Override the named value used for the resource URI in the APIM policy. If not set, defaults to resource-uri-{apiId}.'
+        default: ''
 
 permissions:
   id-token: write
@@ -64,13 +69,21 @@ jobs:
 
       - name: Import API into APIM
         uses: azure/powershell@v2
+        env:
+          INPUT_ENVIRONMENT: ${{ inputs.environment }}
+          INPUT_API_NAME: ${{ inputs.apiName }}
+          INPUT_API_PATH: ${{ inputs.apiPath }}
+          INPUT_OPENAPI_SPEC_PATH: ${{ inputs.openApiSpecPath }}
+          INPUT_USES_CIAM_LOGIN: ${{ inputs.usesCiamLogin }}
+          INPUT_ENABLE_OPENAPI_PREFIX_IN_SERVER_URL: ${{ inputs['enable-openapi-prefix-in-server-url'] }}
+          INPUT_RESOURCE_URI_NAMED_VALUE: ${{ inputs.resourceUriNamedValue }}
         with:
           inlineScript: |
             . ./shared-workflows/utilities/Import-UniApimApi.ps1
-            $usesCiamLogin = [System.Convert]::ToBoolean("${{ inputs.usesCiamLogin }}")
-            $enableOpenApiPrefixInServerUrl = [System.Convert]::ToBoolean("${{ inputs['enable-openapi-prefix-in-server-url'] }}")
+            $usesCiamLogin = [System.Convert]::ToBoolean($env:INPUT_USES_CIAM_LOGIN)
+            $enableOpenApiPrefixInServerUrl = [System.Convert]::ToBoolean($env:INPUT_ENABLE_OPENAPI_PREFIX_IN_SERVER_URL)
 
-            Import-UniApimApi "${{ inputs.environment }}" "${{ inputs.apiName }}" "${{ inputs.apiPath }}" "${{ inputs.openApiSpecPath }}" $usesCiamLogin $enableOpenApiPrefixInServerUrl -Verbose -ErrorAction Stop
+            Import-UniApimApi $env:INPUT_ENVIRONMENT $env:INPUT_API_NAME $env:INPUT_API_PATH $env:INPUT_OPENAPI_SPEC_PATH $usesCiamLogin $enableOpenApiPrefixInServerUrl $env:INPUT_RESOURCE_URI_NAMED_VALUE -Verbose -ErrorAction Stop
           azPSVersion: "latest"
           errorActionPreference: 'stop'
           failOnStandardError: true
