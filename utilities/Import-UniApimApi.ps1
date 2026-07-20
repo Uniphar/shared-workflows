@@ -89,6 +89,7 @@ At the moment this function only supports scenarios where the following is true:
     Add-AzApiManagementApiToProduct -Context $context -ProductId $product.ProductId -ApiId $api.ApiId
 
     $namedValueName = if (-not [string]::IsNullOrWhiteSpace($ResourceUriNamedValueOverride)) { $ResourceUriNamedValueOverride.Trim() } else { "resource-uri-$($api.ApiId)" }
+    $namedValueName = if ('test' -eq $Environment) { $namedValueName.TrimEnd('-prep') }
     $namedValueExists = $null -ne (Get-AzApiManagementNamedValue -Context $context -Name $namedValueName)
 
     if ($namedValueExists) {
