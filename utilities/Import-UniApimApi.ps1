@@ -89,9 +89,11 @@ At the moment this function only supports scenarios where the following is true:
     Add-AzApiManagementApiToProduct -Context $context -ProductId $product.ProductId -ApiId $api.ApiId
 
     $namedValueName = if (-not [string]::IsNullOrWhiteSpace($ResourceUriNamedValueOverride)) { $ResourceUriNamedValueOverride.Trim() } else { "resource-uri-$($api.ApiId)" }
+    $namedValueName = if ('test' -eq $Environment) { $namedValueName -replace '-prep$', '' } else { $namedValueName }
     $namedValueExists = $null -ne (Get-AzApiManagementNamedValue -Context $context -Name $namedValueName)
 
     if ($namedValueExists) {
+        Write-Verbose "Named value '$namedValueName' exists. Applying policy to API '$($api.ApiId)'."
         # Replace placeholder in policy XML for corresponding named value
         $policyPath = "./shared-workflows/utilities/apiPolicy.xml"
         $policyTemplatePath = "./shared-workflows/utilities/apiPolicyTemplate.xml"
