@@ -57,7 +57,7 @@ jobs:
         with:
           repository: Uniphar/shared-workflows
           path: shared-workflows
-          ref: fix/prep-named-value
+          ref: main
 
       - name: azure login
         uses: azure/login@v2
